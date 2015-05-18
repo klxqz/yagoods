@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    $(window).load(function() {
+        var yaParams = {
+            order_id: "{$order.id}",
+            order_price: {number_format($order.total, 2, '.', '')},
+            currency: "{$order.currency}",
+            exchange_rate: 1,
+            goods:
+                    [
+                        {foreach $order.items as $item}
+                        {
+                            id: "{$item.id}",
+                            name: "{$item.name|escape}",
+                            price: {number_format($item.price, 2, '.', '')},
+                            quantity: {$item.quantity}
+                        }{if !$item@last},{/if}
+                        {/foreach}
+
+                    ]
+        };
+        yaCounter{$settings.counter_id|escape}.reachGoal('{$settings.target_name|escape}', yaParams);
+    });
+</script>
+

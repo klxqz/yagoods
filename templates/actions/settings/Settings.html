@@ -1,0 +1,259 @@
+<style type="text/css">
+    .plugin-menu{
+        float: right;
+        list-style: none;
+    }
+
+    .plugin-menu li{
+        float: left;
+        margin-left: 10px;
+    }
+    .b-informer__switcher{
+        margin-left: 18px;
+    }
+    .b-informer__switcher i{
+        background: rgba(0, 0, 0, 0) url("{$wa_app_static_url}plugins/yagoods/img/plus_minus_with_disabled.png") no-repeat scroll 0 2px;
+        height: 14px;
+        margin-left: -18px;
+        margin-top: 1px;
+        position: absolute;
+        width: 17px;
+    }
+    .b-informer__switcher.open i{
+        background-position: -36px 2px;
+    }
+    .ext-options{
+        display: none;
+    }
+    .b-icon {
+        display: inline-block;
+        height: 16px;
+        overflow: hidden;
+        width: 16px;
+    }
+    .b-icon_type_additional-constructor, .b-icon_type_webmaster, .b-icon_type_stat, .b-icon_type_new, .b-icon_type_edit, .b-icon_type_delete, .b-icon_type_noflash, .b-icon_type_error, .b-icon_type_market, .b-icon_type_club, .b-icon_type_how, .b-icon_type_tip, .b-icon_type_warning, .b-icon_type_market-th {
+        background-image: url("{$wa_app_static_url}plugins/yagoods/img/icon-sprite.png?r=14");
+        background-repeat: no-repeat;
+    }
+    .b-icon_type_warning {
+        background-position: -120px -24px;
+        margin-right: 4px;
+        top: 2px;
+    }
+    .b-icon_type_warning.b-icon_color_red {
+        background-position: -136px -24px;
+    }
+</style>
+<ul class="plugin-menu">
+    <li><a target="_blank" href="http://www.webasyst.ru/store/plugin/shop/yagoods/reviews/">Оставить отзыв о плагине</a></li>
+    <li><a href="mailto:support@wa-plugins.ru">Поддержка разработчика плагина</a></li>
+    <li><a target="_blank" href="http://wa-plugins.ru/">WA-PLUGINS.ru - сайт разработчика</a></li>
+</ul>
+<h1>Яндекс.Метрика</h1>
+<div class="fields form">
+    <form action="?plugin=yagoods&action=save" method="post" id="plugins-settings-form">
+        {$wa->csrf()}
+        <div class="field-group">
+            <div class="field">
+                <div class="name">
+                    Статус плагина
+                </div>
+                <div class="value">
+                    <select name="shop_yagoods[status]">
+                        <option {if $settings.status == 1} selected="selected"{/if} value="1">Включен</option>
+                        <option {if $settings.status == 0} selected="selected"{/if} value="0">Выключен</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <p class="b-information "><i class="b-icon b-icon_type_warning b-icon_color_red"></i>Устанавливая код счётчика на сайт, вы соглашаетесь со всеми условиями <a href="http://legal.yandex.ru/metrica_termsofuse/" target="_blank">Пользовательского соглашения</a>.</p>
+            <p class="b-information "><i class="b-icon b-icon_type_warning "></i>Активизация информера может занимать некоторое время.</p>
+        </div>
+
+
+        {$tpls = array()}
+        {foreach $domain_routes as $domain => $routes}
+            {foreach $routes as $route}
+                {$domain_route = "`$domain`/`$route.url`"}
+                {$domain_hash = md5($domain_route)}
+                {$setting = $domain_settings[$domain_hash]}
+
+                <h2>Поселение: {$domain_route}</h2>
+
+                <div class="field-group">
+                    <div class="field">
+                        <div class="name">
+                            Статус плагина для поселения
+                        </div>
+                        <div class="value">
+                            <select name="domains_settings[{$domain_hash}][status]">
+                                <option {if $setting.status|default:0 == 1} selected="selected"{/if} value="1">Включен</option>
+                                <option {if $setting.status|default:0 == 0} selected="selected"{/if} value="0">Выключен</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="name">
+                            Счетчик Яндекс.Метрика
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][counter]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][counter]" {if $setting.counter|default:1}checked="checked"{/if} />
+                            <p class="hint">Вывод кода счетчика сгенерированного плагином в секции &lt;head&gt;. Для правильной работы в теме дизайна должен присутствовать хук frontend_head.</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Номер счётчика
+                        </div>
+                        <div class="value">
+                            <input type="text" name="domains_settings[{$domain_hash}][counter_id]" value="{$setting.counter_id|default:'XXXXXXXX'|escape}"  />
+                            <p class="hint">Создайте счетчик в Яндекс.Метрике для Вашего сайта и скопируйте "Номер счётчика"</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Вебвизор
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][webvisor]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][webvisor]" {if $setting.webvisor|default:1}checked="checked"{/if} />
+                            <p class="hint">Запись и анализ поведения посетителей сайта.</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Карта кликов
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][clickmap]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][clickmap]" {if $setting.clickmap|default:1}checked="checked"{/if} />
+                            <p class="hint">Сбор статистики для работы отчёта «Карта кликов».</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Внешние ссылки, загрузки файлов и отчёт по кнопке «Поделиться»
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][trackLinks]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][trackLinks]" {if $setting.trackLinks|default:1}checked="checked"{/if} />
+                            <p class="hint">Сбор статистики по ссылкам на внешние ресурсы, загрузке файлов и кнопке «Поделиться».</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Точный показатель отказов
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][accurateTrackBounce]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][accurateTrackBounce]" {if $setting.accurateTrackBounce|default:1}checked="checked"{/if} />
+                            <p class="hint">Отказом будет считаться посещение, в течение которого пользователь был на одной странице и посвятил ей менее 15 секунд.</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Информер
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][informer]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][informer]" {if $setting.informer|default:1}checked="checked"{/if} />
+                            <p class="hint">
+                                <br><img src="{$wa_app_static_url}plugins/yagoods/img/3_1_FFFFFFFF_EFEFEFFF_0_pageviews.png"/>
+                                Для вывода кода информера используется хук frontend_footer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <a class="b-informer__switcher" href="#"><i></i>Дополнительно</a>
+
+                    <div class="ext-options">
+                        <div class="field">
+                            <div class="name">
+                                Запрет отправки на индексацию страниц сайта. <a target="_blank" href="http://help.yandex.ru/metrika/?id=1120714">Подробнее</a>
+                            </div>
+                            <div class="value">
+                                <input type="hidden" value="0" name="domains_settings[{$domain_hash}][ut]" />
+                                <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][ut]" {if $setting.ut|default:0}checked="checked"{/if} />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="name">
+                                Асинхронный код
+                            </div>
+                            <div class="value">
+                                <input type="hidden" value="0" name="domains_settings[{$domain_hash}][async]" />
+                                <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][async]" {if $setting.async|default:0}checked="checked"{/if} />
+                                <p>Асинхронный код не блокирует и не влияет на скорость загрузки страницы вашего сайта.</p>
+                            </div>
+                        </div>                        
+                        <div class="field">
+                            <div class="name">
+                                Отслеживание хеша в адресной строке браузера
+                            </div>
+                            <div class="value">
+                                <input type="hidden" value="0" name="domains_settings[{$domain_hash}][trackHash]" />
+                                <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][trackHash]" {if $setting.trackHash|default:0}checked="checked"{/if} />
+                                <p class="hint">Опция применима для AJAX-сайтов.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <div class="field">
+                        <div class="name">
+                            Передавать статистику по заказам
+                        </div>
+                        <div class="value">
+                            <input type="hidden" value="0" name="domains_settings[{$domain_hash}][order_statistic]" />
+                            <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][order_statistic]" {if $setting.order_statistic|default:1}checked="checked"{/if} />
+                            <p class="hint">После оформления заказа плагин генерирует код, для передачи информации о заказе и товарах в Яндекс.Метрику. Для вывода кода используется хук frontend_checkout</p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">
+                            Идентификатор цели
+                        </div>
+                        <div class="value">
+                            <input type="text" name="domains_settings[{$domain_hash}][target_name]" value="{$setting.target_name|default:'order'|escape}"  />
+                            <p class="hint">Создайте новую цель с условием "событие" в Яндекс.Метрике для Вашего сайта с идентификатором цели, например, order</p>
+                        </div>
+                    </div>
+
+                </div>
+                <hr>
+            {/foreach}
+        {/foreach}
+
+
+
+        <div class="field">
+            <div class="value submit">
+                <input type="submit" class="button green" value="Сохранить">
+                <span id="plugins-settings-form-status" style="display:none">
+                    <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.b-informer__switcher').click(function () {
+            if ($(this).hasClass('open')) {
+                $(this).next('.ext-options').hide();
+                $(this).removeClass('open');
+            } else {
+                $(this).next('.ext-options').show();
+                $(this).addClass('open');
+            }
+            return false;
+        });
+    });
+</script>
