@@ -45,9 +45,9 @@
     }
 </style>
 <ul class="plugin-menu">
-    <li><a target="_blank" href="http://www.webasyst.ru/store/plugin/shop/yagoods/reviews/">Оставить отзыв о плагине</a></li>
+    {*<li><a target="_blank" href="http://www.webasyst.ru/store/plugin/shop/yagoods/reviews/">Оставить отзыв о плагине</a></li>*}
     <li><a href="mailto:support@wa-plugins.ru">Поддержка разработчика плагина</a></li>
-    <li><a target="_blank" href="http://wa-plugins.ru/">WA-PLUGINS.ru - сайт разработчика</a></li>
+        {*<li><a target="_blank" href="http://wa-plugins.ru/">WA-PLUGINS.ru - сайт разработчика</a></li>*}
 </ul>
 <h1>Яндекс.Метрика</h1>
 <div class="fields form">
@@ -173,6 +173,7 @@
                     <a class="b-informer__switcher" href="#"><i></i>Дополнительно</a>
 
                     <div class="ext-options">
+                        {*
                         <div class="field">
                             <div class="name">
                                 Запрет отправки на индексацию страниц сайта. <a target="_blank" href="http://help.yandex.ru/metrika/?id=1120714">Подробнее</a>
@@ -181,7 +182,7 @@
                                 <input type="hidden" value="0" name="domains_settings[{$domain_hash}][ut]" />
                                 <input type="checkbox" value="1" name="domains_settings[{$domain_hash}][ut]" {if $setting.ut|default:0}checked="checked"{/if} />
                             </div>
-                        </div>
+                        </div>*}
                         <div class="field">
                             <div class="name">
                                 Асинхронный код
@@ -204,6 +205,19 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="field-group">
+                    <div class="field">
+                        <div class="name">
+                            Запрет отправки на индексацию страниц сайта
+                        </div>
+                        <div class="value">
+                            <textarea name="domains_settings[{$domain_hash}][noindex]">{$setting.noindex|default:''}</textarea>
+                            <p class="hint">Страницы не подлежащие индексации. Каждая новая запись начинается с новой строки.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="field-group">
                     <div class="field">
                         <div class="name">

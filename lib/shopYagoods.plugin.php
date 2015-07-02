@@ -12,11 +12,11 @@ class shopYagoodsPlugin extends shopPlugin {
         'trackLinks' => 1,
         'accurateTrackBounce' => 1,
         'informer' => 1,
-        'ut' => 0,
         'async' => 0,
         'trackHash' => 0,
         'order_statistic' => 1,
         'target_name' => 'order',
+        'noindex' => "my/*\r\ncheckout/*",
     );
 
     public function frontendCheckout($param) {
@@ -48,6 +48,16 @@ class shopYagoodsPlugin extends shopPlugin {
         $settings = shopYagoods::getDomainSettings();
         if (!$this->getSettings('status') || !$settings['status'] || !$settings['counter']) {
             return false;
+        }
+
+        $current_url = wa()->getConfig()->getCurrentUrl();
+        $noindex = explode("\r\n", $settings['noindex']);
+        foreach ($noindex as $pattern) {
+            $pattern = trim($pattern);
+            $pattern = '/' . str_replace('/', '\/', $pattern) . '/';
+            if (preg_match($pattern, $current_url)) {
+                $settings['ut'] = 'noindex';
+            }
         }
 
         $view = wa()->getView();
